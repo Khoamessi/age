@@ -7,18 +7,17 @@ function calculateAge(dateStr: string) {
 
   let years = today.getFullYear() - dob.getFullYear();
   let months = today.getMonth() - dob.getMonth();
-  const dayDiff = today.getDate() - dob.getDate();
-  if (years - 1 < 0) return "not born yet";
-  else {
-    if (dayDiff < 0) {
-      months -= 1;
-    }
-    if (months < 0) {
-      years -= 1;
-      months += 12;
-    }
-    return `${years} years ${months} months old`;
+  let dayDiff = today.getDate() - dob.getDate();
+  if (dayDiff < 0) {
+    months -= 1;
+    dayDiff += new Date(dob.getFullYear(), dob.getMonth() + 1, 0).getDate();
   }
+  if (months < 0) {
+    years -= 1;
+    months += 12;
+  }
+  if (years < 0) return "not born yet";
+  return `${years} years ${months} months and ${dayDiff} days old`;
 }
 
 export default function CardContent() {
@@ -45,7 +44,7 @@ export default function CardContent() {
         />
         {age && (
           <p className="mt-4 decoration-dashed text-2xl w-full h-full">
-            You are
+            You were
             <span className="font-bold"> {age} </span>
           </p>
         )}
